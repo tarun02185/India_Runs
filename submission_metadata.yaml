@@ -1,0 +1,93 @@
+# Redrob Hackathon — Submission Metadata
+
+# ============================================================================
+# Team identity
+# ============================================================================
+team_name: "Byte_ME"
+
+primary_contact:
+  name: "Tarun Kumar Bhutra"
+  email: "tarunbhutra13@gmail.com"
+  phone: "+91-8764472291"
+
+team_members:
+  - name: "Tarun Kumar Bhutra"
+    email: "tarunbhutra13@gmail.com"
+    role: "Solo — ML Engineer / Architect"
+
+# ============================================================================
+# Code and reproducibility
+# ============================================================================
+github_repo: "https://github.com/tarun02185/India_Runs"
+
+sandbox_link: "TBD"  # TODO: Create Google Colab notebook or HuggingFace Space
+
+reproduce_command: "python scripts/precompute.py && python rank.py"
+# Step 1: precompute.py generates sentence-transformer embeddings + FAISS index (~15min, one-time)
+# Step 2: rank.py runs the full hybrid retrieval pipeline (<30s on CPU with 16GB RAM, no network)
+
+# ============================================================================
+# Compute environment
+# ============================================================================
+compute:
+  platform: "Windows Desktop"
+  cpu_cores: 8
+  ram_gb: 16
+  python_version: "3.13"
+  os: "Windows"
+  uses_gpu_for_inference: false
+  has_network_during_ranking: false
+  pre_computation_required: true
+  pre_computation_time_minutes: 15
+  # Pre-computation generates sentence-transformer embeddings (all-MiniLM-L6-v2)
+  # and a FAISS index for dense retrieval. The ranking step uses hybrid retrieval
+  # (BM25 + Dense + Reciprocal Rank Fusion) and completes in ~23 seconds.
+
+# ============================================================================
+# AI tools declaration
+# ============================================================================
+ai_tools_used:
+  - "Gemini (Antigravity IDE)"
+
+ai_usage_summary: |
+  Used Gemini (Antigravity IDE) as a pair-programming assistant for architecture
+  discussion, code generation, and iterative testing. The agent performed code
+  review, critical design audits, and assumption challenges. No candidate data
+  was fed to any external LLM. All ranking logic is deterministic and runs
+  entirely offline.
+
+# ============================================================================
+# Approach summary
+# ============================================================================
+methodology_summary: |
+  7-stage pipeline: LOAD -> JD_EXTRACT -> RETRIEVE -> SCORE -> RANK -> REASON -> OUTPUT.
+
+  Core insight: the JD contains 14 explicit, scorable requirements. A structured
+  JDRequirements data object is extracted once and drives every retrieval query
+  and scoring decision.
+
+  Hybrid retrieval (BM25 + Dense via sentence-transformers/all-MiniLM-L6-v2 +
+  FAISS) with Reciprocal Rank Fusion narrows 100K to 500. Dense retrieval catches
+  candidates who describe ranking/search/recommendation work in plain language
+  without standard ML vocabulary.
+
+  Feature scoring combines technical relevance (55%), career structure (15%),
+  behavioral engagement (15%), logistical fit (10%), and misc signals (5%).
+  A steep sigmoid gate replaces hard thresholds. Skills are cross-validated
+  against career descriptions — keyword stuffing is penalized multiplicatively.
+
+  8-rule honeypot detector catches logical impossibilities (salary inversion,
+  temporal impossibilities, skill/duration mismatches). Result: 0 honeypots in
+  top 100.
+
+  Runtime: ~23s on CPU for 100K candidates. No GPU, no network.
+
+# ============================================================================
+# Declarations
+# ============================================================================
+declarations:
+  read_submission_spec: true
+  code_is_original_work: true
+  no_collusion: true
+  honeypot_check_done: true
+  reproduction_tested: true
