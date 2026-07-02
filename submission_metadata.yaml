@@ -20,7 +20,7 @@ team_members:
 # ============================================================================
 github_repo: "https://github.com/tarun02185/India_Runs"
 
-sandbox_link: "TBD"  # TODO: Create Google Colab notebook or HuggingFace Space
+sandbox_link: "https://colab.research.google.com/drive/1Us1KNgG7UqgI6szw81N_ZY5_0aUeWfBr?usp=sharing"
 
 reproduce_command: "python scripts/precompute.py && python rank.py"
 # Step 1: precompute.py generates sentence-transformer embeddings + FAISS index (~15min, one-time)
