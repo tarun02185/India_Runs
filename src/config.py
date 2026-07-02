@@ -17,6 +17,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 
 CANDIDATES_JSONL = DATA_DIR / "candidates.jsonl"
+CANDIDATES_JSONL_GZ = DATA_DIR / "candidates.jsonl.gz"
 SAMPLE_CANDIDATES = DATA_DIR / "sample_candidates.json"
 
 # Pre-computed artifacts
